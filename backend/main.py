@@ -127,11 +127,19 @@ def build_demo_response(agent_id: str, message: str) -> str:
     """Create a deterministic demo response without external APIs."""
     agent = get_agent(agent_id)
     normalized = message.lower()
-    if any(token in normalized for token in ["código", "codigo", "code", "bug", "error"]):
-        suggestion = "Comparte el lenguaje o el error exacto y te propongo un ejemplo concreto."
-    elif any(token in normalized for token in ["correo", "email", "mensaje", "redacta"]):
+    if any(
+        token in normalized for token in ["código", "codigo", "code", "bug", "error"]
+    ):
+        suggestion = (
+            "Comparte el lenguaje o el error exacto y te propongo un ejemplo concreto."
+        )
+    elif any(
+        token in normalized for token in ["correo", "email", "mensaje", "redacta"]
+    ):
         suggestion = "Indica el destinatario y objetivo para ajustar el tono."
-    elif any(token in normalized for token in ["resume", "resumen", "síntesis", "analiza"]):
+    elif any(
+        token in normalized for token in ["resume", "resumen", "síntesis", "analiza"]
+    ):
         suggestion = "Pega el texto completo y resumo los puntos clave."
     else:
         suggestion = "Cuéntame más detalles o el resultado que esperas lograr."
@@ -140,7 +148,7 @@ def build_demo_response(agent_id: str, message: str) -> str:
         "🧪 Modo demo gratuito (sin API key).\n\n"
         f"Agente seleccionado: {agent['name']}.\n"
         f"{agent['demo_focus']}\n\n"
-        f"Tu mensaje: \"{message.strip()}\".\n\n"
+        f'Tu mensaje: "{message.strip()}".\n\n'
         f"Sugerencia inicial: {suggestion}\n\n"
         "Para respuestas completas, configura OPENAI_API_KEY."
     )
@@ -213,10 +221,12 @@ async def chat(request: ChatRequest):
         conversation_agents.setdefault(conversation_id, agent_id)
 
     # Add user message to history
-    conversations[conversation_id].append({
-        "role": "user",
-        "content": request.message,
-    })
+    conversations[conversation_id].append(
+        {
+            "role": "user",
+            "content": request.message,
+        }
+    )
 
     # Prepare messages for OpenAI
     messages = [
@@ -231,10 +241,12 @@ async def chat(request: ChatRequest):
             for chunk in chunk_text(demo_response):
                 payload = {"type": "text-delta", "delta": f"{chunk} "}
                 yield f"data: {json.dumps(payload)}\n\n"
-            conversations[conversation_id].append({
-                "role": "assistant",
-                "content": demo_response,
-            })
+            conversations[conversation_id].append(
+                {
+                    "role": "assistant",
+                    "content": demo_response,
+                }
+            )
             done_payload = {
                 "type": "done",
                 "conversation_id": conversation_id,
@@ -252,7 +264,7 @@ async def chat(request: ChatRequest):
                 messages=messages,
                 stream=True,
                 temperature=0.7,
-                max_tokens=2000
+                max_tokens=2000,
             )
 
             async for chunk in stream:
@@ -263,10 +275,12 @@ async def chat(request: ChatRequest):
                     yield f"data: {json.dumps(payload)}\n\n"
 
             # Save assistant response to conversation history
-            conversations[conversation_id].append({
-                "role": "assistant",
-                "content": full_response,
-            })
+            conversations[conversation_id].append(
+                {
+                    "role": "assistant",
+                    "content": full_response,
+                }
+            )
 
             # Send completion message
             done_payload = {
@@ -286,7 +300,7 @@ async def chat(request: ChatRequest):
         headers={
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-        }
+        },
     )
 
 

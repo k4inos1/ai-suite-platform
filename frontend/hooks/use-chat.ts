@@ -105,7 +105,7 @@ export function useChat(options: UseChatOptions = {}) {
               } else if (data.type === 'error') {
                 throw new Error(data.message)
               }
-            } catch (e) {
+            } catch {
               // Skip invalid JSON
             }
           }

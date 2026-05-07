@@ -26,3 +26,20 @@ def test_demo_chat_stream():
     assert response.status_code == 200
     assert "data:" in response.text
     assert '"type": "done"' in response.text
+
+
+def test_health_uses_ai_suite_platform_branding():
+    client = TestClient(main.app)
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json()["service"] == "AI Suite Platform"
+
+
+def test_suggestions_include_recipe_prompt():
+    client = TestClient(main.app)
+    response = client.get("/suggestions")
+
+    assert response.status_code == 200
+    suggestions = response.json()["suggestions"]
+    assert any("receta" in suggestion.lower() for suggestion in suggestions)

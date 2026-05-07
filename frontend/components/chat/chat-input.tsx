@@ -100,7 +100,7 @@ export function ChatInput({
       </div>
 
       <p className="text-xs text-muted-foreground text-center mt-2">
-        NexusAI puede cometer errores. Verifica la información importante.
+        AI Suite Platform puede cometer errores. Verifica la información importante.
       </p>
     </div>
   )

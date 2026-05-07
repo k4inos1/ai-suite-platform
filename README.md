@@ -1,20 +1,20 @@
-# AI Chat Assistant
+# AI Suite Platform
 
-Asistente de chat con múltiples agentes, streaming en tiempo real y una arquitectura full‑stack moderna. El frontend está construido con Next.js + React + TypeScript y el backend con FastAPI.
+Monorepo que consolida el backend FastAPI de `ai-chat-assistant-temp` y la experiencia de recetas de `recetas_ai` en una sola plataforma. Incluye chat asistido por IA, múltiples agentes y un Recipe Studio para buscar, formatear y guardar recetas.
 
 ## Características
 
-- **Chat en tiempo real (SSE)** con respuestas en streaming.
+- **AI Chat** con respuestas en streaming por SSE.
+- **Recipe Studio** con búsqueda de recetas, detalle formateado y favoritos en el navegador.
 - **Múltiples agentes** con personalidades configurables.
-- **Soporte Markdown** y UI moderna.
 - **Modo demo gratuito** cuando no existe `OPENAI_API_KEY`.
-- **Separación clara** entre frontend y backend.
+- **Monorepo unificado** con `package.json` y `requirements.txt` en la raíz.
 
 ## Arquitectura
 
-- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS.
-- **Backend**: FastAPI (Python 3.12+), OpenAI SDK, Pydantic.
-- **Infra**: `vercel.json` listo para despliegue en Vercel.
+- **Frontend**: Next.js 16, React 19, TypeScript y Tailwind CSS en `frontend/`.
+- **Backend**: FastAPI (Python 3.12+), OpenAI SDK y Pydantic en `backend/`.
+- **Infra**: `vercel.json` listo para despliegue y proxy API desde el frontend.
 
 ## Requisitos
 
@@ -23,11 +23,17 @@ Asistente de chat con múltiples agentes, streaming en tiempo real y una arquite
 
 ## Configuración local
 
-### 1) Backend (FastAPI)
+### 1) Instalar dependencias
+
+```bash
+npm install
+pip install -r requirements.txt
+```
+
+### 2) Ejecutar el backend
 
 ```bash
 cd backend
-pip install -e .
 fastapi run main.py
 ```
 
@@ -36,12 +42,11 @@ Endpoints principales:
 - `GET /health`
 - `GET /agents`
 - `POST /chat` (streaming)
+- `GET /suggestions`
 
-### 2) Frontend (Next.js)
+### 3) Ejecutar el frontend
 
 ```bash
-cd frontend
-npm install
 npm run dev
 ```
 
@@ -63,37 +68,27 @@ export OPENAI_API_KEY="sk-..."
 
 ## Scripts útiles
 
-### Frontend
-
 ```bash
 npm run dev
 npm run build
-npm start
-```
-
-### Backend
-
-```bash
-pytest backend/
-flake8 backend --count --select=E9,F63,F7,F82 --show-source --statistics
-flake8 backend --count --exit-zero --max-complexity=10 --max-line-length=127
+npm run start
+npm run test:backend
+python -m pytest backend/tests -q
 ```
 
 ## Estructura del repositorio
 
-```
+```text
 .
-├── backend/    # API FastAPI
-├── frontend/   # App Next.js
-├── public/     # Assets estáticos
-├── styles/     # CSS global
-└── vercel.json # Configuración de despliegue
+├── backend/          # API FastAPI
+├── frontend/         # App Next.js con AI Chat y Recipe Studio
+├── package.json      # Scripts/workspace del monorepo
+├── requirements.txt  # Instalación unificada del backend
+├── public/           # Assets estáticos
+├── styles/           # CSS global
+└── vercel.json       # Configuración de despliegue
 ```
 
 ## Contribución
 
 Si deseas proponer mejoras, abre un issue o un pull request con una descripción clara del cambio y pasos de verificación.
-
-## Créditos
-
-Proyecto iniciado con [v0](https://v0.app) y evolucionado en este repositorio.

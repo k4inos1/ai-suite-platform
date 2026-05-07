@@ -3,9 +3,9 @@ import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'NexusAI - Asistente de Chat Inteligente',
-  description: 'Chatbot inteligente construido con Python y modelos de lenguaje. Capaz de responder preguntas, realizar tareas y aprender de las interacciones.',
-  keywords: ['AI', 'chatbot', 'assistant', 'OpenAI', 'Python', 'FastAPI'],
+  title: 'AI Suite Platform',
+  description: 'Monorepo con chat asistido por IA y experiencia de recetas en una sola plataforma.',
+  keywords: ['AI Suite Platform', 'chatbot', 'recipes', 'OpenAI', 'Python', 'FastAPI'],
 }
 
 export const viewport: Viewport = {

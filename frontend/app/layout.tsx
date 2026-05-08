@@ -5,8 +5,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'AI Suite Platform',
-  description: 'Plataforma unificada de Inteligencia Artificial.',
-  keywords: ['AI', 'chatbot', 'assistant', 'recipes', 'OpenAI'],
+  description: 'Monorepo con chat asistido por IA y experiencia de recetas en una sola plataforma.',
+  keywords: ['AI Suite Platform', 'chatbot', 'recipes', 'OpenAI', 'Python', 'FastAPI'],
 }
 
 export const viewport: Viewport = {

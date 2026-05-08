@@ -89,10 +89,10 @@ export function WelcomeScreen({
         </div>
         
         <h1 className="text-3xl font-bold text-foreground mb-2 text-balance text-center">
-          Bienvenido a NexusAI
+          Bienvenido a AI Suite Platform
         </h1>
         <p className="text-muted-foreground text-center max-w-md text-pretty">
-          Tu asistente de IA inteligente. Pregúntame lo que quieras o elige una de las sugerencias.
+          Tu espacio unificado para chat asistido por IA y exploración de recetas.
         </p>
         {agentName && (
           <div className="mt-3 text-center">

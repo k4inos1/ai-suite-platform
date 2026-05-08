@@ -62,7 +62,7 @@ Entrega resúmenes y siguientes pasos.""",
     },
 }
 
-app = fastapi.FastAPI(title="AI Chat Assistant API")
+app = fastapi.FastAPI(title="AI Suite Platform API")
 
 app.add_middleware(
     fastapi.middleware.cors.CORSMiddleware,
@@ -182,7 +182,7 @@ async def health() -> dict[str, str | bool]:
     """Health check endpoint"""
     return {
         "status": "ok",
-        "service": "AI Chat Assistant",
+        "service": "AI Suite Platform",
         "demo_mode": DEMO_MODE,
     }
 
@@ -348,6 +348,7 @@ async def get_suggestions():
             "Ayúdame a escribir un correo profesional",
             "Escribe código Python para ordenar una lista",
             "Dame ideas para un proyecto de programación",
+            "Crea una receta saludable con pollo y verduras",
             "Resume este texto que te voy a compartir",
             "Traduce este párrafo al inglés",
         ],

@@ -1,7 +1,7 @@
 [project]
-name = "ai-chat-backend"
+name = "ai-suite-platform-backend"
 version = "0.1.0"
-description = "AI Chat Assistant - FastAPI backend with OpenAI integration"
+description = "AI Suite Platform - FastAPI backend with chat and recipe-ready integrations"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.128.1",

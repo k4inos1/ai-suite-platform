@@ -40,7 +40,7 @@ export function ChatHeader({
               <Bot className="w-4 h-4 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-foreground">NexusAI</h1>
+              <h1 className="text-lg font-semibold text-foreground">AI Suite Platform</h1>
             </div>
           </div>
 

@@ -135,3 +135,373 @@
 .typing-dot:nth-child(3) {
   animation-delay: 0.4s;
 }
+
+
+/* Efecto de gradiente animado */
+.animated-gradient {
+  background: linear-gradient(-45deg, #ff6b6b, #ff8e8e, #4ecdc4, #45b7af);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.animated-bg {
+  background: linear-gradient(
+    -45deg,
+    #ff6b6b15,
+    #ff8e8e15,
+    #4ecdc415,
+    #45b7af15
+  );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Patrón de fondo sutil */
+.pattern-bg {
+  background-color: var(--background);
+  background-image: radial-gradient(
+    circle at center,
+    var(--primary) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  background-position: center;
+  opacity: 0.03;
+}
+
+/* Efectos de hover para cards */
+.recipe-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Animación de entrada para elementos */
+.fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efecto de brillo para elementos destacados */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  opacity: 0.8;
+}
+
+/* Estilos para efectos 3D y flip cards */
+.perspective {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Efecto de vapor para imágenes de comida */
+.steam {
+  position: relative;
+  overflow: hidden;
+}
+
+.steam::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-50%);
+  animation: steam 3s ease-out infinite;
+}
+
+@keyframes steam {
+  0% {
+    transform: translateY(100%) translateX(-50%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100%) translateX(-50%);
+    opacity: 0;
+  }
+}
+
+/* Efecto de brillo para elementos interactivos */
+.shine-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-hover::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.3s;
+  opacity: 0;
+}
+
+.shine-hover:hover::after {
+  animation: shine 1s ease-out;
+  opacity: 1;
+}
+
+/* Efecto de página de libro */
+.page-turn {
+  transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transform-origin: left center;
+}
+
+.page-turn-enter {
+  transform: rotateY(180deg);
+}
+
+.page-turn-enter-active {
+  transform: rotateY(0deg);
+}
+
+.page-turn-exit {
+  transform: rotateY(0deg);
+}
+
+.page-turn-exit-active {
+  transform: rotateY(-180deg);
+}
+
+/* Estilo de menú de restaurante */
+.menu-border {
+  position: relative;
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--background), var(--background)),
+    linear-gradient(45deg, var(--primary), var(--primary-foreground));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  border-radius: var(--radius);
+}
+
+/* Animación de confeti para celebraciones */
+@keyframes confetti-slow {
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(0) rotateY(0);
+  }
+  100% {
+    transform: translate3d(25px, 105vh, 0) rotateX(360deg) rotateY(180deg);
+  }
+}
+
+@keyframes confetti-medium {
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(0) rotateY(0);
+  }
+  100% {
+    transform: translate3d(100px, 105vh, 0) rotateX(100deg) rotateY(360deg);
+  }
+}
+
+@keyframes confetti-fast {
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(0) rotateY(0);
+  }
+  100% {
+    transform: translate3d(-50px, 105vh, 0) rotateX(10deg) rotateY(250deg);
+  }
+}
+
+/* Gradientes temáticos */
+.gradient-food {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 107, 107, 0.1),
+    rgba(255, 142, 142, 0.1),
+    rgba(78, 205, 196, 0.1),
+    rgba(69, 183, 175, 0.1)
+  );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+/* Efecto de elevación suave */
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar personalizada temática */
+.themed-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.themed-scroll::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 4px;
+}
+
+.themed-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.themed-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  opacity: 0.8;
+}
+
+/* Animación de escritura para títulos */
+.typing-effect {
+  overflow: hidden;
+  border-right: 2px solid var(--primary);
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+  margin: 0 auto;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--primary);
+  }
+}
+
+/* Efecto de badge giratorio */
+.rotating-badge {
+  animation: badge-rotate 20s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes badge-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Efecto de destello para logros */
+.achievement-unlock {
+  animation: achievement-flash 1s ease-out;
+}
+
+@keyframes achievement-flash {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

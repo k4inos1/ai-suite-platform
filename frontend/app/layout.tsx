@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
+import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -24,14 +25,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased min-h-screen flex flex-col">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <header className="flex h-14 items-center justify-between border-b px-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="font-bold text-lg bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+              AI Suite Platform
+            </div>
+            <nav className="flex gap-4">
+              <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
+                Chatbot
+              </Link>
+              <Link href="/recetas" className="text-sm font-medium hover:text-primary transition-colors">
+                Recetas AI
+              </Link>
+            </nav>
+          </header>
+          <main className="flex-1 overflow-hidden flex flex-col relative">
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

@@ -1,0 +1,203 @@
+name: 🔒 Security & Vulnerability Scan
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  schedule:
+    - cron: '0 2 * * 0'  # Weekly on Sunday at 2 AM UTC
+
+jobs:
+  code-scanning:
+    name: 🔍 CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: 'cpp, csharp, go, java, javascript, python, ruby, typescript'
+          queries: security-and-quality
+      
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  dependency-check:
+    name: 📦 OWASP Dependency Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: ${{ github.repository }}
+          path: '.'
+          format: 'JSON'
+          args: >
+            --enableExperimental
+      
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-check-report
+          path: reports/
+
+  npm-audit:
+    name: 📦 npm Audit
+    runs-on: ubuntu-latest
+    if: hashFiles('package*.json', 'frontend/package.json', 'backend/package.json') != ''
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Run npm audit
+        run: |
+          npm audit --json > npm-audit-report.json || true
+        
+      - name: Check for vulnerabilities
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('npm-audit-report.json', 'utf8'));
+            const vulnerabilities = report.metadata?.vulnerabilities;
+            
+            if (vulnerabilities && vulnerabilities.total > 0) {
+              console.log(`⚠️ Found ${vulnerabilities.total} vulnerabilities`);
+              console.log(`  Critical: ${vulnerabilities.critical || 0}`);
+              console.log(`  High: ${vulnerabilities.high || 0}`);
+              console.log(`  Medium: ${vulnerabilities.medium || 0}`);
+              console.log(`  Low: ${vulnerabilities.low || 0}`);
+              
+              if (vulnerabilities.critical > 0 || vulnerabilities.high > 0) {
+                core.setFailed('Critical or high vulnerabilities found!');
+              }
+            }
+      
+      - name: Upload npm audit report
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-audit-report
+          path: npm-audit-report.json
+
+  python-audit:
+    name: 🐍 Python Security Check
+    runs-on: ubuntu-latest
+    if: hashFiles('requirements.txt', 'backend/requirements.txt') != ''
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install audit tools
+        run: |
+          pip install pip-audit bandit safety
+      
+      - name: Run pip-audit
+        run: pip-audit --desc
+        continue-on-error: true
+      
+      - name: Run Bandit (code security)
+        run: bandit -r . -f json -o bandit-report.json
+        continue-on-error: true
+      
+      - name: Run Safety check
+        run: safety check --json > safety-report.json
+        continue-on-error: true
+      
+      - name: Upload security reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+
+  container-scan:
+    name: 🐳 Container Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+      
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  secret-scan:
+    name: 🔐 Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  summary:
+    name: 📋 Security Summary
+    runs-on: ubuntu-latest
+    needs: [code-scanning, dependency-check, npm-audit, python-audit, container-scan, secret-scan]
+    if: always()
+    steps:
+      - name: Create security report summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const statuses = {
+              'CodeQL': '${{ needs.code-scanning.result }}',
+              'OWASP Dependency Check': '${{ needs.dependency-check.result }}',
+              'npm Audit': '${{ needs.npm-audit.result }}',
+              'Python Security': '${{ needs.python-audit.result }}',
+              'Container Scan': '${{ needs.container-scan.result }}',
+              'Secret Scan': '${{ needs.secret-scan.result }}'
+            };
+            
+            let summary = '## 🔒 Security Scan Summary\n\n';
+            let allPassed = true;
+            
+            Object.entries(statuses).forEach(([tool, status]) => {
+              const icon = status === 'success' ? '✅' : status === 'skipped' ? '⏭️' : '❌';
+              summary += `${icon} ${tool}: ${status}\n`;
+              if (status !== 'success' && status !== 'skipped') allPassed = false;
+            });
+            
+            summary += '\n---\n\n';
+            summary += allPassed 
+              ? '✨ All security checks passed!' 
+              : '⚠️ Some security checks failed. Review above for details.';
+            
+            core.summary.addRaw(summary);
+            await core.summary.write();

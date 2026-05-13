@@ -1,0 +1,210 @@
+name: 🔍 PR Review & Quality Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint-backend:
+    name: Backend Linting & Type Check
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.files.*.filename, 'backend/')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          pip install -r requirements.txt
+          pip install pylint flake8 black mypy
+      
+      - name: Run Pylint
+        working-directory: ./backend
+        run: pylint --rcfile=setup.cfg $(find . -name "*.py" -type f | grep -v __pycache__)
+        continue-on-error: true
+      
+      - name: Run Flake8
+        working-directory: ./backend
+        run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        continue-on-error: true
+      
+      - name: Run Black check
+        working-directory: ./backend
+        run: black --check .
+        continue-on-error: true
+
+  lint-frontend:
+    name: Frontend Linting & Type Check
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.files.*.filename, 'frontend/')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: TypeScript check
+        working-directory: ./frontend
+        run: npx tsc --noEmit
+        continue-on-error: true
+
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  documentation:
+    name: 📚 Documentation Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check if README.md was modified
+        id: readme
+        run: |
+          if git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q README.md; then
+            echo "modified=true" >> $GITHUB_OUTPUT
+          else
+            echo "modified=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check if CHANGELOG.md exists
+        id: changelog
+        run: test -f CHANGELOG.md && echo "exists=true" >> $GITHUB_OUTPUT || echo "exists=false" >> $GITHUB_OUTPUT
+      
+      - name: Comment if docs needed
+        if: steps.readme.outputs.modified == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '📚 **Documentation Reminder**: Consider updating README.md or CHANGELOG.md with your changes.'
+            })
+
+  dependencies:
+    name: 📦 Dependency Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+        if: contains(github.event.pull_request.files.*.filename, 'backend/')
+      
+      - name: Check Python dependencies
+        working-directory: ./backend
+        run: pip check
+        continue-on-error: true
+        if: contains(github.event.pull_request.files.*.filename, 'backend/')
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+        if: contains(github.event.pull_request.files.*.filename, 'frontend/')
+      
+      - name: Check npm dependencies
+        working-directory: ./frontend
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+        if: contains(github.event.pull_request.files.*.filename, 'frontend/')
+
+  build:
+    name: 🏗️ Build Check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: Backend
+            working-directory: ./backend
+            condition: contains(github.event.pull_request.files.*.filename, 'backend/')
+          - name: Frontend
+            working-directory: ./frontend
+            condition: contains(github.event.pull_request.files.*.filename, 'frontend/')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js (Frontend)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+        if: matrix.name == 'Frontend'
+      
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm ci && npm run build
+        continue-on-error: true
+        if: matrix.name == 'Frontend'
+
+  summary:
+    name: ✅ PR Summary
+    runs-on: ubuntu-latest
+    needs: [lint-backend, lint-frontend, security-scan, documentation, dependencies, build]
+    if: always()
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const statuses = {
+              'lint-backend': '${{ needs.lint-backend.result }}',
+              'lint-frontend': '${{ needs.lint-frontend.result }}',
+              'security-scan': '${{ needs.security-scan.result }}',
+              'documentation': '${{ needs.documentation.result }}',
+              'dependencies': '${{ needs.dependencies.result }}',
+              'build': '${{ needs.build.result }}'
+            };
+            
+            let summary = '## 📋 PR Quality Summary\n\n';
+            Object.entries(statuses).forEach(([job, status]) => {
+              const icon = status === 'success' ? '✅' : status === 'skipped' ? '⏭️' : '❌';
+              summary += `${icon} ${job}: ${status}\n`;
+            });
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

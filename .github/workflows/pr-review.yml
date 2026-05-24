@@ -7,6 +7,11 @@ on:
       - main
       - develop
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   lint-backend:
     name: Backend Linting & Type Check
@@ -94,6 +99,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - name: Check if README.md was modified
         id: readme
@@ -109,7 +116,7 @@ jobs:
         run: test -f CHANGELOG.md && echo "exists=true" >> $GITHUB_OUTPUT || echo "exists=false" >> $GITHUB_OUTPUT
       
       - name: Comment if docs needed
-        if: steps.readme.outputs.modified == 'false'
+        if: steps.readme.outputs.modified == 'false' && github.actor != 'dependabot[bot]'
         uses: actions/github-script@v7
         with:
           script: |
@@ -185,6 +192,7 @@ jobs:
     if: always()
     steps:
       - uses: actions/github-script@v7
+        if: github.actor != 'dependabot[bot]'
         with:
           script: |
             const statuses = {

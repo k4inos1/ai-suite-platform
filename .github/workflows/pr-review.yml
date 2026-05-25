@@ -9,8 +9,9 @@ on:
 
 permissions:
   contents: read
-  issues: write
+  security-events: write
   pull-requests: write
+  issues: write
 
 jobs:
   lint-backend:

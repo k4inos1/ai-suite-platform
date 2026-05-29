@@ -24,7 +24,7 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
@@ -42,7 +42,7 @@ jobs:
     name: 📦 OWASP Dependency Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Run OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     if: hashFiles('package*.json', 'frontend/package.json', 'backend/package.json') != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -106,7 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     if: hashFiles('requirements.txt', 'backend/requirements.txt') != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -141,7 +141,7 @@ jobs:
     name: 🐳 Container Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -161,7 +161,7 @@ jobs:
     name: 🔐 Secret Scanning
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       

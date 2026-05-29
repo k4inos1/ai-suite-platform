@@ -27,6 +27,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       
       - name: Approve PR
+        continue-on-error: true
         run: gh pr review --approve "${{ github.event.pull_request.number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

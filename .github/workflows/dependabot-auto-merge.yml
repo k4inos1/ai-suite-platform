@@ -28,8 +28,8 @@ jobs:
       
       - name: Approve PR
         if: steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major'
-        run: gh pr review --approve "${{ github.event.pull_request.number }}"
         continue-on-error: true
+        run: gh pr review --approve "${{ github.event.pull_request.number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       

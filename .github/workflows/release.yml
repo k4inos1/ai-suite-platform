@@ -6,6 +6,9 @@ on:
       - 'v*.*.*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   validate-tag:
     name: ✅ Validate Release Tag
@@ -25,6 +28,8 @@ jobs:
     name: 📦 Create Release
     needs: validate-tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
         with:

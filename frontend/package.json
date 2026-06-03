@@ -70,7 +70,7 @@
         "react-tsparticles": "^2.12.2",
         "recharts": "2.15.0",
         "sass": "*",
-        "sass-embedded": "*",
+        "sass-embedded": "^1.100.0",
         "sharp": "^0.34.3",
         "sonner": "^1.7.1",
         "stylus": "*",

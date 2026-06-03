@@ -76,7 +76,7 @@ jobs:
           npm audit --json > npm-audit-report.json || true
         
       - name: Check for vulnerabilities
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
@@ -177,7 +177,7 @@ jobs:
     if: always()
     steps:
       - name: Create security report summary
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const statuses = {

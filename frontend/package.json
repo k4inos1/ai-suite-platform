@@ -68,7 +68,7 @@
         "react-resizable-panels": "^2.1.7",
         "react-spring": "^10.0.4",
         "react-tsparticles": "^2.12.2",
-        "recharts": "2.15.0",
+        "recharts": "3.8.1",
         "sass": "*",
         "sass-embedded": "^1.100.0",
         "sharp": "^0.34.3",

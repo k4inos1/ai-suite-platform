@@ -47,7 +47,7 @@
         "eslint": "*",
         "eslint-plugin-react-hooks": "*",
         "eslint-plugin-react-refresh": "*",
-        "framer-motion": "^12.23.5",
+        "framer-motion": "^12.40.0",
         "globals": "*",
         "input-otp": "1.4.2",
         "jiti": "*",

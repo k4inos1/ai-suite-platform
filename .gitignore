@@ -22,3 +22,10 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+
+# Test artifacts
+test-results/
+playwright-report/
+coverage/
+htmlcov/
+reports/

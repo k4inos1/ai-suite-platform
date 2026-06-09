@@ -293,7 +293,11 @@ async def chat(request: ChatRequest):
             yield f"data: {json.dumps(done_payload)}\n\n"
 
         except Exception as e:
-            error_payload = {"type": "error", "message": str(e)}
+            print(f"Error while generating chat response: {e}", flush=True)
+            error_payload = {
+                "type": "error",
+                "message": "An internal error occurred. Please try again.",
+            }
             yield f"data: {json.dumps(error_payload)}\n\n"
 
     return StreamingResponse(

@@ -46,7 +46,7 @@
         "embla-carousel-react": "8.5.1",
         "eslint": "*",
         "eslint-plugin-react-hooks": "*",
-        "eslint-plugin-react-refresh": "*",
+        "eslint-plugin-react-refresh": "^0.5.3",
         "framer-motion": "^12.40.0",
         "globals": "*",
         "input-otp": "1.4.2",

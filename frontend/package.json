@@ -82,7 +82,7 @@
         "tsx": "^4.22.4",
         "use-sound": "^5.0.0",
         "vaul": "^0.9.6",
-        "yaml": "*",
+        "yaml": "^2.9.0",
         "zod": "^4.4.3"
     },
     "devDependencies": {

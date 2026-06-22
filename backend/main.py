@@ -17,9 +17,6 @@ from fastapi.responses import StreamingResponse
 from openai import AsyncOpenAI
 from pydantic import BaseModel
 
-# Check if we're in demo mode (no API key)
-DEMO_MODE = not os.getenv("OPENAI_API_KEY")
-
 DEFAULT_AGENT_ID = "nexus"
 AGENTS: dict[str, dict[str, str]] = {
     "nexus": {
@@ -34,7 +31,6 @@ Tus características principales son:
 - Proporcionar respuestas en el idioma que el usuario prefiera
 
 Siempre busca ser útil, preciso y educativo en tus respuestas.""",
-        "demo_focus": "Puedo explicar conceptos, resumir textos y ayudarte a planificar.",
     },
     "dev": {
         "name": "CodePilot",
@@ -42,7 +38,6 @@ Siempre busca ser útil, preciso y educativo en tus respuestas.""",
         "system_prompt": """Eres "CodePilot", un mentor senior de ingeniería.
 Responde con pasos claros, ejemplos de código concisos y mejores prácticas.
 Prioriza seguridad, rendimiento y mantenibilidad. Pregunta por requisitos faltantes.""",
-        "demo_focus": "Puedo proponer estructuras de código, explicar errores y diseñar APIs.",
     },
     "writer": {
         "name": "TextoPro",
@@ -50,7 +45,6 @@ Prioriza seguridad, rendimiento y mantenibilidad. Pregunta por requisitos faltan
         "system_prompt": """Eres "TextoPro", un asistente experto en redacción.
 Ofrece versiones alternativas, mejora claridad y adapta el tono al público objetivo.
 Sé breve y preciso, evita relleno.""",
-        "demo_focus": "Puedo pulir el tono, crear borradores y sugerir títulos.",
     },
     "analyst": {
         "name": "Insight",
@@ -58,7 +52,6 @@ Sé breve y preciso, evita relleno.""",
         "system_prompt": """Eres "Insight", un analista estratégico.
 Descompón problemas complejos en pasos accionables y valida supuestos.
 Entrega resúmenes y siguientes pasos.""",
-        "demo_focus": "Puedo organizar ideas, resumir información y definir planes.",
     },
 }
 
@@ -113,49 +106,6 @@ def resolve_agent(
     return selected_agent_id, get_agent(selected_agent_id)
 
 
-def chunk_text(text: str, chunk_size: int = 48) -> Iterable[str]:
-    """Split text into streaming-friendly chunks."""
-    current = ""
-    for word in text.split():
-        if len(current) + len(word) + 1 > chunk_size and current:
-            yield current.strip()
-            current = ""
-        current += f"{word} "
-    if current.strip():
-        yield current.strip()
-
-
-def build_demo_response(agent_id: str, message: str) -> str:
-    """Create a deterministic demo response without external APIs."""
-    agent = get_agent(agent_id)
-    normalized = message.lower()
-    if any(
-        token in normalized for token in ["código", "codigo", "code", "bug", "error"]
-    ):
-        suggestion = (
-            "Comparte el lenguaje o el error exacto y te propongo un ejemplo concreto."
-        )
-    elif any(
-        token in normalized for token in ["correo", "email", "mensaje", "redacta"]
-    ):
-        suggestion = "Indica el destinatario y objetivo para ajustar el tono."
-    elif any(
-        token in normalized for token in ["resume", "resumen", "síntesis", "analiza"]
-    ):
-        suggestion = "Pega el texto completo y resumo los puntos clave."
-    else:
-        suggestion = "Cuéntame más detalles o el resultado que esperas lograr."
-
-    return (
-        "🧪 Modo demo gratuito (sin API key).\n\n"
-        f"Agente seleccionado: {agent['name']}.\n"
-        f"{agent['demo_focus']}\n\n"
-        f'Tu mensaje: "{message.strip()}".\n\n'
-        f"Sugerencia inicial: {suggestion}\n\n"
-        "Para respuestas completas, configura OPENAI_API_KEY."
-    )
-
-
 # In-memory conversation storage (for demo - use database in production)
 conversations: dict[str, list[dict[str, str]]] = {}
 conversation_agents: dict[str, str] = {}
@@ -185,7 +135,7 @@ async def health() -> dict[str, str | bool]:
     return {
         "status": "ok",
         "service": "AI Suite Platform",
-        "demo_mode": DEMO_MODE,
+        "demo_mode": False,
     }
 
 
@@ -194,7 +144,7 @@ async def list_agents():
     """List available chat agents."""
     return {
         "default_agent_id": DEFAULT_AGENT_ID,
-        "demo_mode": DEMO_MODE,
+        "demo_mode": False,
         "agents": [
             {
                 "id": agent_id,
@@ -211,6 +161,13 @@ async def chat(request: ChatRequest):
     """
     Main chat endpoint with streaming responses
     """
+    # Enforce OpenAI API key presence
+    if not os.getenv("OPENAI_API_KEY"):
+        raise HTTPException(
+            status_code=500,
+            detail="OPENAI_API_KEY environment variable is not set",
+        )
+
     conversation_id = request.conversation_id or f"conv_{datetime.now().timestamp()}"
 
     agent_id, agent = resolve_agent(conversation_id, request.agent_id)
@@ -238,25 +195,6 @@ async def chat(request: ChatRequest):
 
     async def generate() -> AsyncGenerator[str, None]:
         """Stream the response from OpenAI"""
-        if DEMO_MODE:
-            demo_response = build_demo_response(agent_id, request.message)
-            for chunk in chunk_text(demo_response):
-                payload = {"type": "text-delta", "delta": f"{chunk} "}
-                yield f"data: {json.dumps(payload)}\n\n"
-            conversations[conversation_id].append(
-                {
-                    "role": "assistant",
-                    "content": demo_response,
-                }
-            )
-            done_payload = {
-                "type": "done",
-                "conversation_id": conversation_id,
-                "agent_id": agent_id,
-            }
-            yield f"data: {json.dumps(done_payload)}\n\n"
-            return
-
         try:
             full_response = ""
 
@@ -354,7 +292,6 @@ async def get_suggestions():
             "Ayúdame a escribir un correo profesional",
             "Escribe código Python para ordenar una lista",
             "Dame ideas para un proyecto de programación",
-            "Crea una receta saludable con pollo y verduras",
             "Resume este texto que te voy a compartir",
             "Traduce este párrafo al inglés",
         ],

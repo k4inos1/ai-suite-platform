@@ -18,7 +18,6 @@ const FEEDBACK_RATING: Record<'up' | 'down', number> = {
 export function ChatContainer() {
   const [agents, setAgents] = useState<AgentSummary[]>([])
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null)
-  const [demoMode, setDemoMode] = useState(false)
   const [agentError, setAgentError] = useState<string | null>(null)
   const [feedbackError, setFeedbackError] = useState<string | null>(null)
   const [suggestions, setSuggestions] = useState<string[]>([])
@@ -51,7 +50,6 @@ export function ChatContainer() {
         if (!isActive) return
 
         setAgents(data.agents)
-        setDemoMode(data.demo_mode)
         setSelectedAgentId((current) => current ?? data.default_agent_id ?? data.agents[0]?.id ?? null)
       } catch (error) {
         if (!isActive) return
@@ -174,7 +172,6 @@ export function ChatContainer() {
         agents={agents}
         selectedAgentId={selectedAgentId}
         onAgentChange={setSelectedAgentId}
-        demoMode={demoMode}
       />
 
       {agentError && (
@@ -194,7 +191,6 @@ export function ChatContainer() {
             onSuggestionClick={handleSuggestionClick}
             agentName={selectedAgent?.name}
             agentDescription={selectedAgent?.description}
-            demoMode={demoMode}
             suggestions={suggestions}
           />
         ) : (

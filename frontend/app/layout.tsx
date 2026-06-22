@@ -5,8 +5,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'AI Suite Platform',
-  description: 'Monorepo con chat asistido por IA y experiencia de recetas en una sola plataforma.',
-  keywords: ['AI Suite Platform', 'chatbot', 'recipes', 'OpenAI', 'Python', 'FastAPI'],
+  description: 'Chat de inteligencia artificial inteligente y amigable con múltiples agentes.',
+  keywords: ['AI Suite Platform', 'chatbot', 'OpenAI', 'Python', 'FastAPI'],
 }
 
 export const viewport: Viewport = {
@@ -36,14 +36,6 @@ export default function RootLayout({
             <div className="font-bold text-lg bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
               AI Suite Platform
             </div>
-            <nav className="flex gap-4">
-              <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
-                Chatbot
-              </Link>
-              <Link href="/recetas" className="text-sm font-medium hover:text-primary transition-colors">
-                Recetas AI
-              </Link>
-            </nav>
           </header>
           <main className="flex-1 overflow-hidden flex flex-col relative">
             {children}

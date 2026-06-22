@@ -11,7 +11,6 @@ interface ChatHeaderProps {
   agents?: AgentSummary[]
   selectedAgentId?: string | null
   onAgentChange?: (agentId: string) => void
-  demoMode?: boolean
 }
 
 export function ChatHeader({
@@ -19,7 +18,6 @@ export function ChatHeader({
   agents,
   selectedAgentId,
   onAgentChange,
-  demoMode,
 }: ChatHeaderProps) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -64,11 +62,6 @@ export function ChatHeader({
                     </option>
                   ))}
                 </select>
-                {demoMode && (
-                  <span className="rounded-full bg-primary/10 px-2 py-1 text-[10px] text-primary">
-                    Demo gratis
-                  </span>
-                )}
               </div>
             )}
             {onClearChat && (

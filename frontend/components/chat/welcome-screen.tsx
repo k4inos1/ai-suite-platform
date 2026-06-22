@@ -7,7 +7,6 @@ interface WelcomeScreenProps {
   onSuggestionClick: (suggestion: string) => void
   agentName?: string
   agentDescription?: string
-  demoMode?: boolean
   suggestions?: string[]
 }
 
@@ -54,7 +53,6 @@ export function WelcomeScreen({
   onSuggestionClick,
   agentName,
   agentDescription,
-  demoMode,
   suggestions,
 }: WelcomeScreenProps) {
   const promptList =
@@ -92,7 +90,7 @@ export function WelcomeScreen({
           Bienvenido a AI Suite Platform
         </h1>
         <p className="text-muted-foreground text-center max-w-md text-pretty">
-          Tu espacio unificado para chat asistido por IA y exploración de recetas.
+          Tu espacio inteligente para asistencia conversacional impulsada por IA.
         </p>
         {agentName && (
           <div className="mt-3 text-center">
@@ -101,9 +99,6 @@ export function WelcomeScreen({
               <p className="text-xs text-muted-foreground">{agentDescription}</p>
             )}
           </div>
-        )}
-        {demoMode && (
-          <p className="mt-2 text-xs text-primary">Modo demo gratuito activado</p>
         )}
       </div>
 

@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.files.*.filename, 'backend/')
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.files.*.filename, 'frontend/')
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -80,7 +80,7 @@ jobs:
     name: 🔒 Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -99,7 +99,7 @@ jobs:
     name: 📚 Documentation Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       
@@ -132,7 +132,7 @@ jobs:
     name: 📦 Dependency Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -171,7 +171,7 @@ jobs:
             working-directory: ./frontend
             condition: contains(github.event.pull_request.files.*.filename, 'frontend/')
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       - name: Setup Node.js (Frontend)
         uses: actions/setup-node@v6

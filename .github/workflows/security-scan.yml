@@ -42,7 +42,7 @@ jobs:
   npm-audit:
     name: 📦 npm Audit
     runs-on: ubuntu-latest
-    if: hashFiles('package*.json', 'frontend/package.json', 'backend/package.json') != ''
+    if: hashFiles('package*.json') != ''
     steps:
       - uses: actions/checkout@v6
       

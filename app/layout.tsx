@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
-import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {

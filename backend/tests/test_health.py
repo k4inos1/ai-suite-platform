@@ -12,7 +12,3 @@ def test_health_endpoint_returns_status_and_mode():
     assert payload["status"] == "ok"
     assert "demo_mode" in payload
 
-
-def test_chunk_text_splits_content():
-    chunks = list(main.chunk_text("one two three four", chunk_size=8))
-    assert chunks

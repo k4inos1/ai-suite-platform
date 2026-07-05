@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: |
-          pip install -r requirements.txt
+          pip install -r ../requirements.txt
           pip install pylint flake8 black mypy
       
       - name: Run Pylint

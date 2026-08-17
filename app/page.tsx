@@ -8,9 +8,9 @@ export default function HomePage() {
       <div className="border-b bg-background/80 px-4 py-3 backdrop-blur-sm">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-primary">AI Suite Platform</p>
+            <p className="text-sm font-medium text-primary">ContentCraft AI</p>
             <h1 className="text-xl font-semibold text-foreground">
-              Chat Asistido por Inteligencia Artificial
+              Creador de Contenido Inteligente
             </h1>
           </div>
         </div>

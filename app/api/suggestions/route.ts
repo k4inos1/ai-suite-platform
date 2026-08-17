@@ -3,12 +3,12 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   return NextResponse.json({
     suggestions: [
-      'Explícame cómo funciona la inteligencia artificial',
-      'Ayúdame a escribir un correo profesional',
-      'Escribe código Python para ordenar una lista',
-      'Dame ideas para un proyecto de programación',
-      'Resume este texto que te voy a compartir',
-      'Traduce este párrafo al inglés',
+      'Redacta un post para Instagram vendiendo un servicio de consultoría financiera con tono divertido',
+      'Escribe la estructura y palabras clave para un artículo sobre cómo ahorrar energía en casa',
+      'Crea una secuencia de 3 correos de bienvenida para nuevos clientes de un gimnasio local',
+      'Escribe un anuncio para Facebook promocionando un descuento de temporada en una tienda online',
+      'Dame 5 ideas de títulos atractivos para un blog de marketing digital',
+      'Escribe un copy corto para Instagram sobre el lanzamiento de una app móvil de meditación',
     ],
   })
 }

@@ -1,22 +1,22 @@
 import { NextResponse } from 'next/server'
 
-const DEFAULT_AGENT_ID = 'nexus'
+const DEFAULT_AGENT_ID = 'instagram_copywriter'
 const AGENTS = {
-  nexus: {
-    name: 'NexusAI',
-    description: 'Asistente generalista para resolver dudas y tareas diarias.',
+  instagram_copywriter: {
+    name: 'Instagram Copywriter',
+    description: 'Especialista en redactar posts virales, enganches, llamadas a la acción (CTA) y hashtags.',
   },
-  dev: {
-    name: 'CodePilot',
-    description: 'Mentor técnico para arquitectura, código y depuración.',
+  seo_writer: {
+    name: 'Redactor SEO',
+    description: 'Redactor experto en estructurar artículos de blog optimizados para posicionamiento orgánico en buscadores.',
   },
-  writer: {
-    name: 'TextoPro',
-    description: 'Especialista en redacción, tono y contenido profesional.',
+  email_marketer: {
+    name: 'Email Marketer',
+    description: 'Diseñador de secuencias de correos persuasivos para convertir suscriptores en clientes.',
   },
-  analyst: {
-    name: 'Insight',
-    description: 'Analista para síntesis, planificación y descomposición de problemas.',
+  ad_specialist: {
+    name: 'Especialista en Ads',
+    description: 'Creador de anuncios publicitarios de alta conversión para Facebook, Instagram y Google Ads.',
   },
 }
 

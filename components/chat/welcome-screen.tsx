@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, Code, FileText, Languages, Lightbulb, Pencil, Zap } from 'lucide-react'
+import { Bot, FileText, Lightbulb, Pencil, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface WelcomeScreenProps {

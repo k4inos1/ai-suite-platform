@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, Code, FileText, Languages, Lightbulb, Pencil, Zap } from 'lucide-react'
+import { Bot, FileText, Lightbulb, Pencil, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface WelcomeScreenProps {
@@ -12,39 +12,39 @@ interface WelcomeScreenProps {
 
 const suggestionTemplates = [
   {
-    icon: Code,
-    title: "Ayuda con código",
-    defaultPrompt: "Escribe código Python para ordenar una lista de números",
+    icon: Pencil,
+    title: "Post de Instagram",
+    defaultPrompt: "Redacta un post para Instagram vendiendo un servicio de consultoría financiera con tono divertido",
     color: "text-blue-500"
   },
   {
-    icon: Pencil,
-    title: "Escribir contenido",
-    defaultPrompt: "Ayúdame a escribir un correo profesional",
+    icon: FileText,
+    title: "Artículo SEO",
+    defaultPrompt: "Escribe la estructura y palabras clave para un artículo sobre cómo ahorrar energía en casa",
     color: "text-green-500"
   },
   {
     icon: Lightbulb,
-    title: "Ideas creativas",
-    defaultPrompt: "Dame ideas para un proyecto de programación",
+    title: "Emails de Venta",
+    defaultPrompt: "Crea una secuencia de 3 correos de bienvenida para nuevos clientes de un gimnasio local",
     color: "text-yellow-500"
   },
   {
-    icon: FileText,
-    title: "Resumir textos",
-    defaultPrompt: "Resume este texto que te voy a compartir",
+    icon: Zap,
+    title: "Anuncios Publicitarios",
+    defaultPrompt: "Escribe un anuncio para Facebook promocionando un descuento de temporada en una tienda online",
     color: "text-purple-500"
   },
   {
-    icon: Languages,
-    title: "Traducir",
-    defaultPrompt: "Traduce este párrafo al inglés",
+    icon: Pencil,
+    title: "Ideas para Blogs",
+    defaultPrompt: "Dame 5 ideas de títulos atractivos para un blog de marketing digital",
     color: "text-pink-500"
   },
   {
-    icon: Zap,
-    title: "Explicaciones",
-    defaultPrompt: "Explícame cómo funciona la inteligencia artificial",
+    icon: Bot,
+    title: "Copys Cortos",
+    defaultPrompt: "Escribe un copy corto para Instagram sobre el lanzamiento de una app móvil de meditación",
     color: "text-orange-500"
   }
 ]
@@ -87,10 +87,10 @@ export function WelcomeScreen({
         </div>
         
         <h1 className="text-3xl font-bold text-foreground mb-2 text-balance text-center">
-          Bienvenido a AI Suite Platform
+          Creador de Contenido Inteligente
         </h1>
         <p className="text-muted-foreground text-center max-w-md text-pretty">
-          Tu espacio inteligente para asistencia conversacional impulsada por IA.
+          Plataforma de asistencia con agentes especializados en Marketing, Copys, SEO y Publicidad para PYMES.
         </p>
         {agentName && (
           <div className="mt-3 text-center">

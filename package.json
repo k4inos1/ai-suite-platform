@@ -78,7 +78,7 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
     "terser": "^5.49.2",
-    "tsparticles": "4.3.2",
+    "tsparticles": "4.4.0",
     "tsx": "^4.23.12",
     "use-sound": "^5.0.0",
     "vaul": "^1.1.2",

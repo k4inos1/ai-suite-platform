@@ -72,7 +72,7 @@
     "sass": "*",
     "sass-embedded": "^1.100.0",
     "sharp": "^0.35.3",
-    "sonner": "^2.0.7",
+    "sonner": "^2.0.8",
     "stylus": "*",
     "sugarss": "*",
     "tailwind-merge": "^3.6.0",
